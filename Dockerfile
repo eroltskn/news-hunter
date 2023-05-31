@@ -2,7 +2,7 @@
 FROM python:3.9.6-alpine
 
 # set work directory
-WORKDIR /usr/src/app
+WORKDIR /app
 
 # set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
@@ -16,4 +16,4 @@ RUN pip install -r requirements.txt
 # copy project
 COPY . .
 
-CMD [ "python", "./main.py"]
+CMD [ "python", "/app/src/main.py"]
