@@ -4,11 +4,12 @@ import errno
 
 import json
 import urllib.request
+import datetime
 
 from config import Config as CONFIG
 
 
-def findout_difference_objects(old_record, new_record, category):
+def find_out_difference_objects(old_record, new_record, category):
     result = False
     if old_record["detail"] != new_record["detail"]:
         old_record["detail"] = new_record["detail"]
@@ -16,6 +17,10 @@ def findout_difference_objects(old_record, new_record, category):
 
     if old_record["media"] != new_record["links"][1]["href"]:
         old_record["media"] = new_record["links"][1]["href"]
+
+        remove_file_from(category=category,
+                         filename=old_record["filename"])
+
         download_media_from_site(link=new_record["links"][1]["href"],
                                  category=category,
                                  filename=old_record["filename"])
@@ -29,10 +34,17 @@ def findout_difference_objects(old_record, new_record, category):
         old_record["published"] = new_record["published"]
         result = True
 
+    if old_record["link"] != new_record["link"]:
+        old_record["link"] = new_record["link"]
+        result = True
+
+    if result:
+        old_record["updated"] = datetime.datetime.now().isoformat()
+
     return result
 
 
-def startup_check_for_json():
+def create_json_file_startup():
     for category in CONFIG.NEWS_CATEGORIES:
         path = "{}/{}.json".format(CONFIG.JSON_FILE_LOCATION, category)
         if os.path.isfile(path) and os.access(path, os.R_OK):
@@ -44,14 +56,16 @@ def startup_check_for_json():
                 news_file.write(json.dumps({}))
 
 
-def startup_check_for_images():
-    for category in CONFIG.NEWS_CATEGORIES:
-        path = "{}/{}".format(CONFIG.IMAGE_FILE_LOCATION, category)
-        try:
+def create_folders_startup():
+    try:
+        for category in CONFIG.NEWS_CATEGORIES:
+            path = "{}/{}".format(CONFIG.IMAGE_FILE_LOCATION, category)
             os.makedirs(path)
-        except OSError as e:
-            if errno.EEXIST != e.errno:
-                raise
+
+        os.makedirs(CONFIG.JSON_FILE_LOCATION)
+    except OSError as e:
+        if errno.EEXIST != e.errno:
+            raise
 
 
 def download_media_from_site(link, category, filename):
@@ -59,8 +73,17 @@ def download_media_from_site(link, category, filename):
                                "{}/{}/{}.jpg".format(CONFIG.IMAGE_FILE_LOCATION, category, filename))
 
 
+def remove_file_from(category, filename):
+    removed_file = "{}/{}/{}".format(CONFIG.IMAGE_FILE_LOCATION,
+                                     category,
+                                     filename)
+    if os.path.isfile(removed_file):
+        os.unlink(removed_file)
+
+
 def write_data_json_file(category, new_object, filename):
     dictionary = {
+        "id": new_object["id"],
         "detail": new_object["detail"],
         "link": new_object["link"],
         "title": new_object["title"],
@@ -76,11 +99,11 @@ def write_data_json_file(category, new_object, filename):
             file_data["items"] = []
 
         for current_item in file_data["items"]:
-            if current_item["link"] == new_object["link"]:
-
-                if findout_difference_objects(old_record=current_item,
-                                              new_record=new_object,
-                                              category=category):
+            if current_item["id"] == new_object["id"]:
+                is_found = find_out_difference_objects(old_record=current_item,
+                                                       new_record=new_object,
+                                                       category=category)
+                if is_found:
                     file.seek(0)
                     json.dump(file_data, file, indent=4)
                     file.truncate()
