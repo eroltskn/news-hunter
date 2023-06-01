@@ -8,6 +8,9 @@ from src.utils.rss_helper import get_rss_feed_result
 
 
 def trigger_hunting():
+    create_folders_startup()
+    create_json_file_startup()
+
     for category in CONFIG.NEWS_CATEGORIES:
         print(category)
         rss_url = "{}/{}".format(CONFIG.RSS_URL, category)
@@ -26,6 +29,4 @@ def trigger_hunting():
 
 
 if __name__ == "__main__":
-    create_folders_startup()
-    create_json_file_startup()
     trigger_hunting()
