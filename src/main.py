@@ -1,4 +1,4 @@
-from config import Config as CONFIG
+from src.config import Config as CONFIG
 
 
 from src.utils.app_helper import generate_new_uuid, create_folders_startup,\

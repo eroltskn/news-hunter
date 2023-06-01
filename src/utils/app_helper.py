@@ -6,7 +6,7 @@ import json
 import uuid
 import dateutil.parser as parser
 
-from config import Config as CONFIG
+from src.config import Config as CONFIG
 
 
 def generate_new_uuid():

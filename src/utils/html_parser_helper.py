@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 
-from config import Config as CONFIG
+from src.config import Config as CONFIG
 
 
 def get_html_data_from_site(new_object):

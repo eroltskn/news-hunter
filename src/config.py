@@ -1,5 +1,5 @@
 class Config(object):
-    NEWS_CATEGORIES = ["gundem","spor","ekonomi"]
+    NEWS_CATEGORIES = ["gundem", "spor", "ekonomi"]
 
     JSON_FILE_LOCATION = "/app/assets/json"
     IMAGE_FILE_LOCATION = "/app/assets/image"

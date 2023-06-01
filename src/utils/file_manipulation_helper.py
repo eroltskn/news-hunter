@@ -1,12 +1,9 @@
-import io
 import os
-import errno
 
 import json
 import urllib.request
-import datetime
 
-from config import Config as CONFIG
+from src.config import Config as CONFIG
 from src.utils.app_helper import get_datetime_iso_format
 
 
