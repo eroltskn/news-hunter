@@ -42,7 +42,7 @@ def find_out_difference_objects(old_record, new_record, category):
 
 def download_media_from_site(link, category, filename):
     urllib.request.urlretrieve(link,
-                               "{}/{}/{}.jpg".format(CONFIG.IMAGE_FILE_LOCATION, category, filename))
+                               "{}/{}/{}".format(CONFIG.IMAGE_FILE_LOCATION, category, filename))
 
 
 def remove_file_from(category, filename):
@@ -53,14 +53,14 @@ def remove_file_from(category, filename):
         os.unlink(removed_file)
 
 
-def write_data_json_file(category, new_object, filename):
+def write_data_json_file(category, new_object):
     dictionary = {
         "id": new_object["id"],
         "detail": new_object["detail"],
         "link": new_object["link"],
         "title": new_object["title"],
         "published": get_datetime_iso_format(new_object["published"]),
-        "filename": filename,
+        "filename":  new_object["filename"],
         "media": new_object["links"][1]["href"]
     }
 
@@ -87,4 +87,4 @@ def write_data_json_file(category, new_object, filename):
             json.dump(file_data, file, indent=4)
             download_media_from_site(link=new_object["links"][1]["href"],
                                      category=category,
-                                     filename=filename)
+                                     filename=new_object["filename"])

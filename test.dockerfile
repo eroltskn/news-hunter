@@ -18,6 +18,8 @@ RUN pip3 install -r requirements.txt
 
 # copy project
 COPY . .
+RUN  rm -rf ./assets/*
 
+RUN ls
 CMD python -m unittest discover tests/ -p '*.py'
 
