@@ -20,12 +20,13 @@ def trigger_hunting():
         entry_list = feed.entries
 
         for new_object in entry_list:
-            print(new_object["link"])
-            html_data = get_html_data_from_site(new_object=new_object)
-            paragraphs = extract_paragraphs_from_html_data(html_data=html_data)
+            html_data = get_html_data_from_site(link=new_object["link"])
 
+            if html_data is None:
+                continue
+            paragraphs = extract_paragraphs_from_html_data(html_data=html_data)
             new_object["detail"] = paragraphs
-            filename = generate_new_uuid()
+            filename = "{}.jpg".format(generate_new_uuid())
             write_data_json_file(category=category, new_object=new_object, filename=filename)
 
 

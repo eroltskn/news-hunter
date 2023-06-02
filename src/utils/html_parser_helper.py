@@ -4,11 +4,15 @@ from bs4 import BeautifulSoup
 from src.config import Config as CONFIG
 
 
-def get_html_data_from_site(new_object):
-    url = new_object["link"]
-    page = requests.get(url)
+def get_html_data_from_site(link):
+    html_data = None
+    try:
+        url = link
+        page = requests.get(url)
+        html_data = BeautifulSoup(page.content, "html.parser")
+    except Exception as e:
+        print(str(e))
 
-    html_data = BeautifulSoup(page.content, "html.parser")
     return html_data
 
 
