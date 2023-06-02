@@ -75,9 +75,7 @@ class FileManipulation(unittest.TestCase):
             self.assertEqual(self.new_record1["filename"], recently_added["filename"])
             self.assertEqual(self.new_record1["title"], recently_added["title"])
 
-
         write_data_json_file(category=category, new_object=self.new_record2)
-
 
         with open("{}/{}.json".format(CONFIG.JSON_FILE_LOCATION, category), 'r') as file:
             file_data = json.load(file)
