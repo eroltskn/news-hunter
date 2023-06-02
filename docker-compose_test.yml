@@ -1,0 +1,8 @@
+version: '3.8'
+
+services:
+  core_test:
+    container_name: news_app_test
+    build:
+      context: .
+      dockerfile: test.dockerfile
